@@ -6,7 +6,7 @@ use File::Spec;
 use List::Util qw(max);
 use Math::ConvexHull 1.0.4 qw(convex_hull);
 use Slic3r::ExtrusionPath ':roles';
-use Slic3r::Geometry qw(X Y Z X1 Y1 X2 Y2 PI scale unscale move_points);
+use Slic3r::Geometry qw(X Y Z X1 Y1 X2 Y2 PI scale unscale move_points nearest_point);
 use Slic3r::Geometry::Clipper qw(diff_ex union_ex intersection_ex offset JT_ROUND JT_SQUARE);
 use Time::HiRes qw(gettimeofday tv_interval);
 
@@ -43,6 +43,14 @@ sub _trigger_config {
     # store config in a handy place
     $Slic3r::Config = $self->config;
     
+    # legacy with existing config files
+    $self->config->set('first_layer_height', $self->config->layer_height)
+        if !$self->config->first_layer_height;
+    $self->config->set_ifndef('small_perimeter_speed',  $self->config->perimeter_speed);
+    $self->config->set_ifndef('bridge_speed',           $self->config->infill_speed);
+    $self->config->set_ifndef('solid_infill_speed',     $self->config->infill_speed);
+    $self->config->set_ifndef('top_solid_infill_speed', $self->config->solid_infill_speed);
+    
     # initialize extruder(s)
     $Slic3r::extruders = [];
     for my $t (0, map $_-1, map $self->config->get($_), qw(perimeter_extruder infill_extruder support_material_extruder)) {
@@ -72,12 +80,6 @@ sub _trigger_config {
     # G-code flavors
     $self->config->set('extrusion_axis', 'A') if $self->config->gcode_flavor eq 'mach3';
     $self->config->set('extrusion_axis', '')  if $self->config->gcode_flavor eq 'no-extrusion';
-    
-    # legacy with existing config files
-    $self->config->set_ifndef('small_perimeter_speed',  $self->config->perimeter_speed);
-    $self->config->set_ifndef('bridge_speed',           $self->config->infill_speed);
-    $self->config->set_ifndef('solid_infill_speed',     $self->config->infill_speed);
-    $self->config->set_ifndef('top_solid_infill_speed', $self->config->solid_infill_speed);
 }
 
 sub add_objects_from_file {
@@ -572,15 +574,6 @@ sub write_gcode {
     print $fh $gcodegen->set_tool(0);
     print $fh $gcodegen->set_fan(0, 1) if $Slic3r::Config->cooling && $Slic3r::Config->disable_fan_first_layers;
     
-    # this spits out some platic at start from each extruder when they are first used;
-    # the primary extruder will compensate by the normal retraction length, while 
-    # the others will compensate for their toolchange length + restart extra.
-    # this is a temporary solution as all extruders should use some kind of skirt 
-    # to be put into a consistent state.
-    $_->retracted($_->retract_length_toolchange + $_->retract_restart_extra_toolchange)
-        for @{$Slic3r::extruders}[1 .. $#{$Slic3r::extruders}];
-    $gcodegen->retract;
-    
     # write start commands to file
     printf $fh $gcodegen->set_bed_temperature($Slic3r::Config->first_layer_bed_temperature, 1),
         if $Slic3r::Config->first_layer_bed_temperature && $Slic3r::Config->start_gcode !~ /M190/i;
@@ -650,6 +643,7 @@ sub write_gcode {
         
         # extrude brim
         if ($layer_id == 0 && !$brim_done) {
+            $gcode .= $gcodegen->set_tool($Slic3r::Config->support_material_extruder-1);
             $gcodegen->shift_x($shift[X]);
             $gcodegen->shift_y($shift[Y]);
             $gcode .= $gcodegen->extrude_loop($_, 'brim') for @{$self->brim};
