@@ -298,7 +298,7 @@ sub load_file {
     my $model = Slic3r::Model->read_from_file($input_file);
     for my $i (0 .. $#{$model->objects}) {
         my $object = Slic3r::GUI::Plater::Object->new(
-            name                    => basebane($input_file),
+            name                    => basename($input_file),
             input_file              => $input_file,
             input_file_object_id    => $i,
             mesh                    => $model->objects->[$i]->mesh,
@@ -661,7 +661,7 @@ sub make_thumbnail {
     
     my $cb = sub {
         my $object = $self->{objects}[$obj_idx];
-        my $thumbnail = $object->make_thumbnail;
+        my $thumbnail = $object->make_thumbnail(scaling_factor => $self->{scaling_factor});
         
         if ($Slic3r::have_threads) {
             Wx::PostEvent($self, Wx::PlThreadEvent->new(-1, $THUMBNAIL_DONE_EVENT, shared_clone([ $obj_idx, $thumbnail ])));
@@ -769,7 +769,7 @@ sub repaint {
     $dc->DrawRectangle(0, 0, @size);
     
     # draw text if plate is empty
-    if (@{$parent->{objects}}) {
+    if (!@{$parent->{objects}}) {
         $dc->SetTextForeground(Wx::Colour->new(150,50,50));
         $dc->SetFont(Wx::Font->new(14, wxDEFAULT, wxNORMAL, wxNORMAL));
         $dc->DrawLabel(CANVAS_TEXT, Wx::Rect->new(0, 0, $self->GetSize->GetWidth, $self->GetSize->GetHeight), wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
@@ -779,14 +779,15 @@ sub repaint {
     $dc->SetPen(wxBLACK_PEN);
     @{$parent->{object_previews}} = ();
     for my $obj_idx (0 .. $#{$parent->{objects}}) {
-        next unless $parent->{thumbnails}[$obj_idx];
-        for my $copy_idx (0 .. $#{$print->copies->[$obj_idx]}) {
-            my $copy = $print->copies->[$obj_idx][$copy_idx];
-            push @{$parent->{object_previews}}, [ $obj_idx, $copy_idx, $parent->{thumbnails}[$obj_idx]->clone ];
-            $parent->{object_previews}->[-1][2]->translate(map $parent->to_pixel($copy->[$_]) + $parent->{shift}[$_], (X,Y));
+        my $object = $parent->{objects}[$obj_idx];
+        next unless $object->thumbnail;
+        for my $instance_idx (0 .. $#{$object->instances}) {
+            my $instance = $object->instances->[$instance_idx];
+            push @{$parent->{object_previews}}, [ $obj_idx, $instance_idx, $object->thumbnail->clone ];
+            $parent->{object_previews}->[-1][2]->translate(map $parent->to_pixel($instance->[$_]) + $parent->{shift}[$_], (X,Y));
             
             my $drag_object = $self->{drag_object};
-            if (defined $drag_object && $obj_idx == $drag_object->[0] && $copy_idx == $drag_object->[1]) {
+            if (defined $drag_object && $obj_idx == $drag_object->[0] && $instance_idx == $drag_object->[1]) {
                 $dc->SetBrush($parent->{dragged_brush});
             } elsif (grep { $_->[0] == $obj_idx } @{$parent->{selected_objects}}) {
                 $dc->SetBrush($parent->{selected_brush});
@@ -796,7 +797,7 @@ sub repaint {
             $dc->DrawPolygon($parent->_y($parent->{object_previews}->[-1][2]), 0, 0);
             
             # if sequential printing is enabled and we have more than one object
-            if ($parent->{config}->complete_objects && (map @$_, @{$print->copies}) > 1) {
+            if ($parent->{config}->complete_objects && (map @{$_->instances}, @{$parent->{objects}}) > 1) {
                 my $clearance = +($parent->{object_previews}->[-1][2]->offset($parent->{config}->extruder_clearance_radius / 2 * $parent->{scaling_factor}, 1, JT_ROUND))[0];
                 $dc->SetPen($parent->{clearance_pen});
                 $dc->SetBrush($parent->{transparent_brush});
@@ -977,7 +978,7 @@ has 'thumbnail'             => (is => 'rw');
 
 sub _trigger_mesh {
     my $self = shift;
-    $self->size($self->mesh->size) if $self->mesh;
+    $self->size([$self->mesh->size]) if $self->mesh;
 }
 
 sub instances_count {
@@ -987,11 +988,12 @@ sub instances_count {
 
 sub make_thumbnail {
     my $self = shift;
+    my %params = @_;
     
     my @points = map [ @$_[X,Y] ], @{$self->mesh->vertices};
     my $convex_hull = Slic3r::Polygon->new(convex_hull(\@points));
     for (@$convex_hull) {
-        @$_ = map $self->to_pixel($_), @$_;
+        @$_ = map $_ * $params{scaling_factor}, @$_;
     }
     $convex_hull->simplify(0.3);
     
