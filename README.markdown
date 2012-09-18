@@ -9,7 +9,7 @@ A: Yes.
 Slic3T is an STL-to-GCODE translator for RepRap 3D printers, aiming to
 be a modern and fast alternative to Skeinforge.
 
-See the [project homepage](http://slic3r.org/) at slic3r.org
+See the [project homepage](http://Slic3T.org/) at Slic3T.org
 for more information.
 
 ## What language is it written in?
@@ -61,7 +61,7 @@ Sure, it's very usable. Remember that:
 
 ## How to install?
 
-It's very easy. See the [project homepage](http://slic3r.org/)
+It's very easy. See the [project homepage](http://Slic3T.org/)
 for instructions and links to the precompiled packages.
 
 ## Can I help?
@@ -74,9 +74,9 @@ find me in #reprap on FreeNode with the nickname _Sound_.
 Slic3T is licensed under the _GNU Affero General Public License, version 3_.
 The author is Alessandro Ranellucci (me).
 
-## How can I invoke slic3r.pl using the command line?
+## How can I invoke Slic3T.pl using the command line?
 
-    Usage: slic3r.pl [ OPTIONS ] file.stl
+    Usage: Slic3T.pl [ OPTIONS ] file.stl
     
         --help              Output this usage screen and exit
         --save <file>       Save configuration to the specified file
@@ -212,28 +212,28 @@ The author is Alessandro Ranellucci (me).
 
 If you want to change a preset file, just do
 
-    slic3r.pl --load config.ini --layer-height 0.25 --save config.ini
+    Slic3T.pl --load config.ini --layer-height 0.25 --save config.ini
 
 If you want to slice a file overriding an option contained in your preset file:
 
-    slic3r.pl --load config.ini --layer-height 0.25 file.stl
+    Slic3T.pl --load config.ini --layer-height 0.25 file.stl
 
 ## How can I integrate Slic3T with Pronterface?
 
 Put this into *slicecommand*:
 
-    slic3r.pl $s --load config.ini --output $o
+    Slic3T.pl $s --load config.ini --output $o
 
 And this into *sliceoptscommand*:
 
-    slic3r.pl --load config.ini --ignore-nonexistent-config
+    Slic3T.pl --load config.ini --ignore-nonexistent-config
 
-Replace `slic3r.pl` with the full path to the slic3r executable and `config.ini`
+Replace `Slic3T.pl` with the full path to the Slic3T executable and `config.ini`
 with the full path of your config file (put it in your home directory or where
 you like).
 On Mac, the executable has a path like this:
 
-    /Applications/Slic3T.app/Contents/MacOS/slic3r
+    /Applications/Slic3T.app/Contents/MacOS/Slic3T
 
 ## How can I specify a custom filename format for output G-code files?
 
