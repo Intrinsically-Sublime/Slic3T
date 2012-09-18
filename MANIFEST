@@ -40,7 +40,7 @@ lib/Slic3T/TriangleMesh.pm
 lib/Slic3T/TriangleMesh/IntersectionLine.pm
 MANIFEST			This list of files
 README.markdown
-Slic3T.pl
+slic3T.pl
 t/angles.t
 t/arcs.t
 t/clean_polylines.t

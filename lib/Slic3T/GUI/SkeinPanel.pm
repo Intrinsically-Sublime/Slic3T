@@ -142,7 +142,7 @@ sub new {
         $buttons_sizer->Add($load_button, 0);
         EVT_BUTTON($self, $load_button, sub { $self->load_config });
         
-        my $text = Wx::StaticText->new($self, -1, "Remember to check for updates at http://slic3r.org/\nVersion: $Slic3T::VERSION", Wx::wxDefaultPosition, Wx::wxDefaultSize, wxALIGN_RIGHT);
+        my $text = Wx::StaticText->new($self, -1, "Slic3T\nVersion: $Slic3T::VERSION", Wx::wxDefaultPosition, Wx::wxDefaultSize, wxALIGN_RIGHT);
         my $font = Wx::Font->new(10, wxDEFAULT, wxNORMAL, wxNORMAL);
         $text->SetFont($font);
         $buttons_sizer->Add($text, 1, wxEXPAND | wxALIGN_RIGHT);
