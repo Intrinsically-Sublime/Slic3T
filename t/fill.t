@@ -9,15 +9,15 @@ BEGIN {
     use lib "$FindBin::Bin/../lib";
 }
 
-use Slic3r;
+use Slic3T;
 
-my $print = Slic3r::Print->new(
+my $print = Slic3T::Print->new(
     x_length => 50,
     y_length => 50,
 );
 
 {
-    my $filler = Slic3r::Fill::Rectilinear->new(print => $print);
+    my $filler = Slic3T::Fill::Rectilinear->new(print => $print);
     my $surface_width = 250;
     my $distance = $filler->adjust_solid_spacing(
         width       => $surface_width,

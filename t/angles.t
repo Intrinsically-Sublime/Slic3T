@@ -9,8 +9,8 @@ BEGIN {
     use lib "$FindBin::Bin/../lib";
 }
 
-use Slic3r;
-use Slic3r::Geometry qw(line_atan line_direction rad2deg_dir PI);
+use Slic3T;
+use Slic3T::Geometry qw(line_atan line_direction rad2deg_dir PI);
 
 #==========================================================
 

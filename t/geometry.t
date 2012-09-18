@@ -9,8 +9,8 @@ BEGIN {
     use lib "$FindBin::Bin/../lib";
 }
 
-use Slic3r;
-use Slic3r::Geometry qw(PI polyline_remove_parallel_continuous_edges 
+use Slic3T;
+use Slic3T::Geometry qw(PI polyline_remove_parallel_continuous_edges 
     polyline_remove_acute_vertices polygon_remove_acute_vertices
     polygon_remove_parallel_continuous_edges polygon_is_convex);
 
@@ -18,13 +18,13 @@ use Slic3r::Geometry qw(PI polyline_remove_parallel_continuous_edges
 
 my $line1 = [ [5, 15], [30, 15] ];
 my $line2 = [ [10, 20], [10, 10] ];
-is_deeply Slic3r::Geometry::line_intersection($line1, $line2, 1), [10, 15], 'line_intersection';
+is_deeply Slic3T::Geometry::line_intersection($line1, $line2, 1), [10, 15], 'line_intersection';
 
 #==========================================================
 
 $line1 = [ [73.6310778185108/0.0000001, 371.74239268924/0.0000001], [73.6310778185108/0.0000001, 501.74239268924/0.0000001] ];
 $line2 = [ [75/0.0000001, 437.9853/0.0000001], [62.7484/0.0000001, 440.4223/0.0000001] ];
-isnt Slic3r::Geometry::line_intersection($line1, $line2, 1), undef, 'line_intersection';
+isnt Slic3T::Geometry::line_intersection($line1, $line2, 1), undef, 'line_intersection';
 
 #==========================================================
 
@@ -41,8 +41,8 @@ isnt Slic3r::Geometry::line_intersection($line1, $line2, 1), undef, 'line_inters
     # this points belongs to $polyline
     my $point = [2797980957.103410,3392691792.513960];
     
-    local $Slic3r::Geometry::epsilon = 1E-5;
-    is_deeply Slic3r::Geometry::polygon_segment_having_point($polyline, $point), 
+    local $Slic3T::Geometry::epsilon = 1E-5;
+    is_deeply Slic3T::Geometry::polygon_segment_having_point($polyline, $point), 
         [ [2540810000, 2947261000], [2852739000, 3487535000] ],
         'polygon_segment_having_point';
 }
@@ -52,7 +52,7 @@ isnt Slic3r::Geometry::line_intersection($line1, $line2, 1), undef, 'line_inters
 {
     my $point = [ 736310778.185108, 5017423926.8924 ];
     my $line = [ [627484000, 3695776000], [750000000, 3720147000] ];
-    is Slic3r::Geometry::point_in_segment($point, $line), 0, 'point_in_segment';
+    is Slic3T::Geometry::point_in_segment($point, $line), 0, 'point_in_segment';
 }
 
 #==========================================================
@@ -60,7 +60,7 @@ isnt Slic3r::Geometry::line_intersection($line1, $line2, 1), undef, 'line_inters
 {
     my $point = [ 736310778.185108, 5017423926.8924 ];
     my $line = [ [627484000, 3695776000], [750000000, 3720147000] ];
-    is Slic3r::Geometry::point_in_segment($point, $line), 0, 'point_in_segment';
+    is Slic3T::Geometry::point_in_segment($point, $line), 0, 'point_in_segment';
 }
 
 #==========================================================
@@ -88,7 +88,7 @@ my $points = [
     [ 736310778.185108, 5017423926.8924 ],
 ];
 
-is Slic3r::Geometry::can_connect_points(@$points, $polygons), 0, 'can_connect_points';
+is Slic3T::Geometry::can_connect_points(@$points, $polygons), 0, 'can_connect_points';
 
 #==========================================================
 
@@ -99,12 +99,12 @@ is Slic3r::Geometry::can_connect_points(@$points, $polygons), 0, 'can_connect_po
     my $p4 = [20, 20];
     my $p5 = [0,  20];
     
-    is Slic3r::Geometry::angle3points($p2, $p3, $p1),  PI(),   'angle3points';
-    is Slic3r::Geometry::angle3points($p2, $p1, $p3),  PI(),   'angle3points';
-    is Slic3r::Geometry::angle3points($p2, $p3, $p4),  PI()/2*3, 'angle3points';
-    is Slic3r::Geometry::angle3points($p2, $p4, $p3),  PI()/2, 'angle3points';
-    is Slic3r::Geometry::angle3points($p2, $p1, $p4),  PI()/2, 'angle3points';
-    is Slic3r::Geometry::angle3points($p2, $p1, $p5),  PI()/2*3, 'angle3points';
+    is Slic3T::Geometry::angle3points($p2, $p3, $p1),  PI(),   'angle3points';
+    is Slic3T::Geometry::angle3points($p2, $p1, $p3),  PI(),   'angle3points';
+    is Slic3T::Geometry::angle3points($p2, $p3, $p4),  PI()/2*3, 'angle3points';
+    is Slic3T::Geometry::angle3points($p2, $p4, $p3),  PI()/2, 'angle3points';
+    is Slic3T::Geometry::angle3points($p2, $p1, $p4),  PI()/2, 'angle3points';
+    is Slic3T::Geometry::angle3points($p2, $p1, $p5),  PI()/2*3, 'angle3points';
 }
 
 {
@@ -113,9 +113,9 @@ is Slic3r::Geometry::can_connect_points(@$points, $polygons), 0, 'can_connect_po
     my $p3 = [10, 10];
     my $p4 = [30, 10];
     
-    is Slic3r::Geometry::angle3points($p2, $p1, $p3), PI(),       'angle3points';
-    is Slic3r::Geometry::angle3points($p2, $p1, $p4), PI()/2*3,   'angle3points';
-    is Slic3r::Geometry::angle3points($p2, $p1, $p1), 2*PI(),     'angle3points';
+    is Slic3T::Geometry::angle3points($p2, $p1, $p3), PI(),       'angle3points';
+    is Slic3T::Geometry::angle3points($p2, $p1, $p4), PI()/2*3,   'angle3points';
+    is Slic3T::Geometry::angle3points($p2, $p1, $p1), 2*PI(),     'angle3points';
 }
 
 #==========================================================

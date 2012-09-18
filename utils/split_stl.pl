@@ -11,7 +11,7 @@ BEGIN {
 
 use File::Basename qw(basename);
 use Getopt::Long qw(:config no_auto_abbrev);
-use Slic3r;
+use Slic3T;
 $|++;
 
 my %opt = ();
@@ -25,7 +25,7 @@ my %opt = ();
 }
 
 {
-    my $mesh = Slic3r::Format::STL->read_file($ARGV[0]);
+    my $mesh = Slic3T::Format::STL->read_file($ARGV[0]);
     my $basename = $ARGV[0];
     $basename =~ s/\.stl$//i;
     
@@ -52,8 +52,8 @@ my %opt = ();
         
         my $output_file = sprintf '%s_%02d.stl', $basename, ++$part_count;
         printf "Writing to %s\n", basename($output_file);
-        my $new_mesh = Slic3r::TriangleMesh->new(facets => \@facets, vertices => $mesh->vertices);
-        Slic3r::Format::STL->write_file($output_file, $new_mesh, !$opt{ascii});
+        my $new_mesh = Slic3T::TriangleMesh->new(facets => \@facets, vertices => $mesh->vertices);
+        Slic3T::Format::STL->write_file($output_file, $new_mesh, !$opt{ascii});
     }
 }
 

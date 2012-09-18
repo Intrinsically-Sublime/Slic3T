@@ -9,14 +9,14 @@ BEGIN {
     use lib "$FindBin::Bin/../lib";
 }
 
-use Slic3r;
-use Slic3r::Geometry qw(X Y Z A B);
+use Slic3T;
+use Slic3T::Geometry qw(X Y Z A B);
 
 my @lines;
 my $z = 20;
 my @points = ([3, 4], [8, 5], [1, 9]);  # XY coordinates of the facet vertices
 
-my $mesh = Slic3r::TriangleMesh->new(facets => [], vertices => []);
+my $mesh = Slic3T::TriangleMesh->new(facets => [], vertices => []);
 
 is_deeply lines(20, 20, 20), [
     [ $points[0], $points[1] ],

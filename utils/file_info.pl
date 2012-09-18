@@ -11,7 +11,7 @@ BEGIN {
 
 use File::Basename qw(basename);
 use Getopt::Long qw(:config no_auto_abbrev);
-use Slic3r;
+use Slic3T;
 $|++;
 
 my %opt = ();
@@ -26,7 +26,7 @@ my %opt = ();
 {
     my $input_file = $ARGV[0];
     my $mesh;
-    $mesh = Slic3r::Format::STL->read_file($input_file) if $input_file =~ /\.stl$/i;
+    $mesh = Slic3T::Format::STL->read_file($input_file) if $input_file =~ /\.stl$/i;
     die "This script doesn't support AMF yet\n" if $input_file =~ /\.amf$/i;
     die "Unable to read file\n" if !$mesh;
     

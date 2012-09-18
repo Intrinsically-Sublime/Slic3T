@@ -2,11 +2,11 @@ _Q: Oh cool, a new RepRap slicer?_
 
 A: Yes.
 
-# Slic3r
+# Slic3T
 
 ## What's it?
 
-Slic3r is an STL-to-GCODE translator for RepRap 3D printers, aiming to
+Slic3T is an STL-to-GCODE translator for RepRap 3D printers, aiming to
 be a modern and fast alternative to Skeinforge.
 
 See the [project homepage](http://slic3r.org/) at slic3r.org
@@ -19,7 +19,7 @@ If you're wondering why Perl, see http://xkcd.com/224/
 
 ## What's its current status?
 
-Slic3r current key features are:
+Slic3T current key features are:
 
 * multi-platform (Linux/Mac/Win) and packaged as standalone-app with no dependencies required;
 * easy configuration/calibration;
@@ -69,9 +69,9 @@ for instructions and links to the precompiled packages.
 Sure! Send patches and/or drop me a line at aar@cpan.org. You can also 
 find me in #reprap on FreeNode with the nickname _Sound_.
 
-## What's Slic3r license?
+## What's Slic3T license?
 
-Slic3r is licensed under the _GNU Affero General Public License, version 3_.
+Slic3T is licensed under the _GNU Affero General Public License, version 3_.
 The author is Alessandro Ranellucci (me).
 
 ## How can I invoke slic3r.pl using the command line?
@@ -218,7 +218,7 @@ If you want to slice a file overriding an option contained in your preset file:
 
     slic3r.pl --load config.ini --layer-height 0.25 file.stl
 
-## How can I integrate Slic3r with Pronterface?
+## How can I integrate Slic3T with Pronterface?
 
 Put this into *slicecommand*:
 
@@ -233,12 +233,12 @@ with the full path of your config file (put it in your home directory or where
 you like).
 On Mac, the executable has a path like this:
 
-    /Applications/Slic3r.app/Contents/MacOS/slic3r
+    /Applications/Slic3T.app/Contents/MacOS/slic3r
 
 ## How can I specify a custom filename format for output G-code files?
 
 You can specify a filename format by using any of the config options. 
-Just enclose them in square brackets, and Slic3r will replace them upon
+Just enclose them in square brackets, and Slic3T will replace them upon
 exporting.
 The additional `[input_filename]` and `[input_filename_base]` options will
 be replaced by the input file name (in the second case, the .stl extension 

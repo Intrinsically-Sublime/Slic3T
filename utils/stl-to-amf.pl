@@ -11,7 +11,7 @@ BEGIN {
 
 use File::Basename qw(basename);
 use Getopt::Long qw(:config no_auto_abbrev);
-use Slic3r;
+use Slic3T;
 $|++;
 
 my %opt = ();
@@ -24,7 +24,7 @@ my %opt = ();
 }
 
 {
-    my @meshes = map Slic3r::Format::STL->read_file($_), @ARGV;
+    my @meshes = map Slic3T::Format::STL->read_file($_), @ARGV;
     my $output_file = $ARGV[0];
     $output_file =~ s/\.stl$/.amf.xml/i;
     
@@ -40,7 +40,7 @@ my %opt = ();
     }
     
     printf "Writing to %s\n", basename($output_file);
-    Slic3r::Format::AMF->write_file($output_file, $materials, $meshes_by_material);
+    Slic3T::Format::AMF->write_file($output_file, $materials, $meshes_by_material);
 }
 
 

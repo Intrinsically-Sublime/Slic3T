@@ -1,7 +1,7 @@
 use Module::Build;
 
 my $build = Module::Build->new(
-    module_name     => 'Slic3r',
+    module_name     => 'Slic3T',
     dist_abstract   => 'G-code generator for 3D printers',
     dist_author     => 'Alessandro Ranellucci <aar@cpan.org>',
     dist_version    => '0.1',
@@ -25,7 +25,7 @@ my $build = Module::Build->new(
         'Growl::GNTP' => '0.15',
         'Wx'          => '0.9901',
     },
-    script_files    => ['slic3r.pl'],
+    script_files    => ['slic3T.pl'],
 );
 $build->dispatch('installdeps');
 $build->dispatch('test', verbose => 0);

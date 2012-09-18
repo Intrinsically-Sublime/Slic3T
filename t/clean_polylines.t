@@ -9,10 +9,10 @@ BEGIN {
     use lib "$FindBin::Bin/../lib";
 }
 
-use Slic3r;
+use Slic3T;
 
 {
-    my $polygon = Slic3r::Polygon->new([
+    my $polygon = Slic3T::Polygon->new([
         [5,0], [10,0], [15,0], [20,0], [20,10], [20,30], [0,0],
     ]);
     
@@ -21,7 +21,7 @@ use Slic3r;
 }
 
 {
-    my $polyline = Slic3r::Polyline->new([
+    my $polyline = Slic3T::Polyline->new([
         [0,0],[1,0],[2,0],[2,1],[2,2],[1,2],[0,2],[0,1],[0,0],
     ]);
     $polyline->simplify(1);
@@ -29,7 +29,7 @@ use Slic3r;
 }
 
 {
-    my $polyline = Slic3r::Polyline->new([
+    my $polyline = Slic3T::Polyline->new([
         [0,0],[0.5,0.5],[1,0],[1.25,-0.25],[1.5,.5],
     ]);
     $polyline->simplify(0.25);
@@ -68,7 +68,7 @@ use Slic3r;
         [197.307,292.831], [199.808,313.1906], [191.5298,315.0787], [187.3082,299.8172], [186.4201,295.3766], 
         [180.595,296.0487], [161.7854,297.4248], [156.8058,297.6214], [154.3395,317.8592],
     ];
-    my $polygon = Slic3r::Polygon->new($gear);
+    my $polygon = Slic3T::Polygon->new($gear);
     $polygon->merge_continuous_lines;
     note sprintf "original points: %d\nnew points: %d", scalar(@$gear), scalar(@$polygon);
     ok @$polygon < @$gear, 'gear was simplified using merge_continuous_lines';
@@ -112,7 +112,7 @@ use Slic3r;
         [3368.3,7868.6],[3409.2,7889.5],[3553.8,7963.2],[3596,7981.4],
     ];
     
-    my $polygon = Slic3r::Polygon->new($circle);
+    my $polygon = Slic3T::Polygon->new($circle);
     $polygon->merge_continuous_lines;
     note sprintf "original points: %d\nnew points: %d", scalar(@$circle), scalar(@$polygon);
     ok @$polygon >= @$circle/3, 'circle was simplified using merge_continuous_lines';

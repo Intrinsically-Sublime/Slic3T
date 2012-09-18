@@ -9,8 +9,8 @@ BEGIN {
     use lib "$FindBin::Bin/../lib";
 }
 
-use Slic3r;
-use Slic3r::Geometry qw(collinear);
+use Slic3T;
+use Slic3T::Geometry qw(collinear);
 
 #==========================================================
 
