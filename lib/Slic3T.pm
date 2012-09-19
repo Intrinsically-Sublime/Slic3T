@@ -14,6 +14,13 @@ sub debugf {
     printf @_ if $debug;
 }
 
+# load threads before Moo as required by it
+BEGIN {
+    use Config;
+    our $have_threads = $Config{useithreads} && eval "use threads; use Thread::Queue; 1";
+}
+
+use Moo;
 use Config;
 use Slic3T::Config;
 use Slic3T::ExPolygon;
