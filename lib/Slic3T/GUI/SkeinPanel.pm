@@ -111,19 +111,19 @@ sub new {
     
     my @tabs = (
         $make_tab->([qw(transform accuracy skirt)], [qw(print retract)]),
-        $make_tab->([qw(cooling)]),
         $make_tab->([qw(printer filament)], [qw(print_speed speed)]),
         $make_tab->([qw(gcode)]),
-        $make_tab->([qw(notes)]),
         $make_tab->([qw(extrusion)], [qw(output)]),
+        $make_tab->([qw(cooling)]),
+        $make_tab->([qw(notes)]),
     );
     
     $tabpanel->AddPage($tabs[0], "Print Settings");
-    $tabpanel->AddPage($tabs[1], "Cooling");
-    $tabpanel->AddPage($tabs[2], "Printer and Filament");
-    $tabpanel->AddPage($tabs[3], "Custom G-code");
-    $tabpanel->AddPage($tabs[4], "Notes");
-    $tabpanel->AddPage($tabs[5], "Advanced");
+    $tabpanel->AddPage($tabs[1], "Printer and Filament");
+    $tabpanel->AddPage($tabs[2], "Custom G-code");
+    $tabpanel->AddPage($tabs[3], "Advanced");
+    $tabpanel->AddPage($tabs[4], "Cooling");
+    $tabpanel->AddPage($tabs[5], "Notes");
         
     my $buttons_sizer;
     {
@@ -163,7 +163,7 @@ sub new {
 
 my $model_wildcard = "STL files (*.stl)|*.stl;*.STL|AMF files (*.amf)|*.amf;*.AMF;*.xml;*.XML";
 my $ini_wildcard = "INI files *.ini|*.ini;*.INI";
-my $gcode_wildcard = "G-code files *.gcode|*.gcode;*.GCODE";
+my $gcode_wildcard = "G-code files *.gcode|*.gcode;*.GCODE;*.g;*.G";
 
 sub do_slice {
     my $self = shift;
