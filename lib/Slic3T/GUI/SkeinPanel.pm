@@ -131,8 +131,12 @@ sub new {
         
         my $slice_button = Wx::Button->new($self, -1, "Slice and Save as...");
         $slice_button->SetDefault();
-        $buttons_sizer->Add($slice_button, 0, wxRIGHT, 20);
+        $buttons_sizer->Add($slice_button, 0);
         EVT_BUTTON($self, $slice_button, sub { $self->do_slice(save_as => 1) });
+
+        my $reslice_button = Wx::Button->new($self, -1, "Reslice...");
+        $buttons_sizer->Add($reslice_button, 0, wxRIGHT, 20);
+        EVT_BUTTON($self, $reslice_button, sub { $self->do_slice(reslice => 1) });
         
         my $save_button = Wx::Button->new($self, -1, "Save config...");
         $buttons_sizer->Add($save_button, 0);
