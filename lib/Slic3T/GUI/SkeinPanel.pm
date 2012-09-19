@@ -24,7 +24,7 @@ sub new {
     my %panels = (
         printer => {
             title => 'Printer',
-            options => [qw(nozzle_diameter print_center z_offset gcode_flavor use_relative_e_distances)],
+            options => [qw(nozzle_diameter extrusion_width_ratio print_center z_offset gcode_flavor use_relative_e_distances)],
         },
         filament => {
             title => 'Filament',
@@ -32,7 +32,7 @@ sub new {
         },
         print_speed => {
             title => 'Print speed',
-            options => [qw(perimeter_speed small_perimeter_speed infill_speed solid_infill_speed bridge_speed)],
+            options => [qw(perimeter_speed small_perimeter_speed infill_speed solid_infill_speed bridge_speed bridge_flow_ratio)],
         },
         speed => {
             title => 'Other speed settings',
@@ -65,15 +65,7 @@ sub new {
         },
         gcode => {
             title => 'Custom G-code',
-            options => [qw(start_gcode end_gcode layer_gcode gcode_comments post_process)],
-        },
-        extrusion => {
-            title => 'Extrusion',
-            options => [qw(extrusion_width_ratio bridge_flow_ratio)],
-        },
-        output => {
-            title => 'Output',
-            options => [qw(output_filename_format)],
+            options => [qw(output_filename_format start_gcode end_gcode layer_gcode gcode_comments post_process)],
         },
         notes => {
             title => 'Notes',
@@ -113,7 +105,6 @@ sub new {
         $make_tab->([qw(transform accuracy skirt)], [qw(print retract)]),
         $make_tab->([qw(printer filament)], [qw(print_speed speed)]),
         $make_tab->([qw(gcode)]),
-        $make_tab->([qw(extrusion)], [qw(output)]),
         $make_tab->([qw(cooling)]),
         $make_tab->([qw(notes)]),
     );
@@ -121,9 +112,8 @@ sub new {
     $tabpanel->AddPage($tabs[0], "Print Settings");
     $tabpanel->AddPage($tabs[1], "Printer and Filament");
     $tabpanel->AddPage($tabs[2], "Custom G-code");
-    $tabpanel->AddPage($tabs[3], "Advanced");
-    $tabpanel->AddPage($tabs[4], "Cooling");
-    $tabpanel->AddPage($tabs[5], "Notes");
+    $tabpanel->AddPage($tabs[3], "Cooling");
+    $tabpanel->AddPage($tabs[4], "Notes");
         
     my $buttons_sizer;
     {

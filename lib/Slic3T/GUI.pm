@@ -60,7 +60,7 @@ sub About {
     
     my $info = Wx::AboutDialogInfo->new;
     $info->SetName('Slic3T');
-    $info->AddDeveloper('Alessandro Ranellucci');
+    $info->AddDeveloper('Sublime, original work by Alessandro Ranellucci');
     
     Wx::AboutBox($info);
 }
