@@ -113,8 +113,8 @@ G1 X50 Y50 F6000 ; move to center
 G1 Z0
 START
 our $end_gcode = <<"END";
-M104 S0 ; turn off temperature
-G28 X0  ; home X axis
+G1 F6000 X0 Y0 ;return home
+M104 S0 ; turn off hotend
 M84     ; disable motors
 END
 our $layer_gcode        = '';
