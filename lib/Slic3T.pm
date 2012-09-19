@@ -78,9 +78,9 @@ our $first_layer_bed_temperature;
 our $travel_speed           = 150;  # mm/s
 our $perimeter_speed        = 45;   # mm/s
 our $small_perimeter_speed  = 45;   # mm/s
-our $infill_speed           = 45;   # mm/s
+our $infill_speed           = 60;   # mm/s
 our $solid_infill_speed     = 45;   # mm/s
-our $bridge_speed           = 18;   # mm/s
+our $bridge_speed           = 25;   # mm/s
 our $bottom_layer_speed_ratio   = 0.6;
 
 # acceleration options
