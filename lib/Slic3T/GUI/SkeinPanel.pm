@@ -129,10 +129,10 @@ sub new {
     {
         $buttons_sizer = Wx::BoxSizer->new(wxHORIZONTAL);
         
-        my $slice_button = Wx::Button->new($self, -1, "Slice...");
+        my $slice_button = Wx::Button->new($self, -1, "Slice and Save as...");
         $slice_button->SetDefault();
         $buttons_sizer->Add($slice_button, 0, wxRIGHT, 20);
-        EVT_BUTTON($self, $slice_button, sub { $self->do_slice });
+        EVT_BUTTON($self, $slice_button, sub { $self->do_slice(save_as => 1) });
         
         my $save_button = Wx::Button->new($self, -1, "Save config...");
         $buttons_sizer->Add($save_button, 0);
