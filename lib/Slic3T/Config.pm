@@ -152,9 +152,9 @@ our $Options = {
         type    => 'f',
         aliases => [qw(bridge_feed_rate)],
     },
-    'bottom_layer_speed_ratio' => {
-        label   => 'Bottom layer speed ratio',
-        cli     => 'bottom-layer-speed-ratio=f',
+    'bottom_layer_speed' => {
+        label   => 'Bottom layer speed (mm/s or %)',
+        cli     => 'bottom-layer-speed=f',
         type    => 'f',
     },
     
@@ -181,9 +181,9 @@ our $Options = {
         cli     => 'layer-height=f',
         type    => 'f',
     },
-    'first_layer_height_ratio' => {
-        label   => 'First layer height ratio',
-        cli     => 'first-layer-height-ratio=f',
+    'first_layer_height' => {
+        label   => 'First layer height (mm or %)',
+        cli     => 'first-layer-height=f',
         type    => 'f',
     },
     'infill_every_layers' => {
@@ -193,9 +193,9 @@ our $Options = {
     },
     
     # flow options
-    'extrusion_width_ratio' => {
-        label   => 'Extrusion width (ratio over layer height; leave zero to calculate automatically)',
-        cli     => 'extrusion-width-ratio=f',
+    'extrusion_width' => {
+        label   => 'Extrusion width (mm or %; zero for automatic)',
+        cli     => 'extrusion-width=f',
         type    => 'f',
     },
     'bridge_flow_ratio' => {
@@ -489,15 +489,22 @@ sub load {
         next if /^$/;
         next if /^\s*#/;
         /^(\w+) = (.*)/ or die "Unreadable configuration file (invalid data at line $.)\n";
-        my $key = $1;
+        my ($key, $val) = ($1, $2);
+
+	# handle legacy options
         next if $ignore{$key};
+	if ($key eq /^(?:extrusion_width|bottom_layer_speed|first_layer_height)_ratio$/) {
+	    $key = $1;
+	    $val = $val =~ /^\d+(\.\d+)?$/ ? ($val*100) . "%" : 0;
+	}
+
         if (!exists $Options->{$key}) {
             $key = +(grep { $Options->{$_}{aliases} && grep $_ eq $key, @{$Options->{$_}{aliases}} }
-                keys %$Options)[0] or warn "Unknown option $1 at line $.\n";
+                keys %$Options)[0] or warn "Unknown option $key at line $.\n";
         }
         next unless $key;
         my $opt = $Options->{$key};
-        set($key, $opt->{deserialize} ? $opt->{deserialize}->($2) : $2);
+        set($key, $opt->{deserialize} ? $opt->{deserialize}->($val) : $val);
     }
     close $fh;
 }
@@ -536,9 +543,12 @@ sub validate {
     die "--layer-height must be a multiple of print resolution\n"
         if $Slic3T::layer_height / $Slic3T::scaling_factor % 1 != 0;
     
-    # --first-layer-height-ratio
-    die "Invalid value for --first-layer-height-ratio\n"
-        if $Slic3T::first_layer_height_ratio < 0;
+    # --first-layer-height
+    die "Invalid value for --first-layer-height\n"
+        if $Slic3T::first_layer_height !~ /^(?:\d+(?:\.\d+)?)%?$/;
+	$Slic3T::_first_layer_height = $Slic3T::first_layer_height =~ /^(\d+(?:\.\d+)?)%$/
+	 ? ($Slic3T::layer_height * $1/100)
+	 : $Slic3T::first_layer_height;
     
     # --filament-diameter
     die "Invalid value for --filament-diameter\n"
@@ -550,12 +560,12 @@ sub validate {
     die "--layer-height can't be greater than --nozzle-diameter\n"
         if $Slic3T::layer_height > $Slic3T::nozzle_diameter;
     die "First layer height can't be greater than --nozzle-diameter\n"
-        if ($Slic3T::layer_height * $Slic3T::first_layer_height_ratio) > $Slic3T::nozzle_diameter;
-    die "First layer height can't be zero or negative\n"
-        if ($Slic3T::layer_height * $Slic3T::first_layer_height_ratio) <= 0;
+        if $Slic3T::_first_layer_height > $Slic3T::nozzle_diameter;
     
-    if ($Slic3T::extrusion_width_ratio) {
-        $Slic3T::flow_width = $Slic3T::layer_height * $Slic3T::extrusion_width_ratio;
+    if ($Slic3T::extrusion_width) {
+        $Slic3T::flow_width = $Slic3T::extrusion_width =~ /^(\d+(?:\.\d+)?)%$/
+            ? ($Slic3T::layer_height * $1 / 100)
+            : $Slic3T::extrusion_width;
     } else {
         # here we calculate a sane default by matching the flow speed (at the nozzle)
         # and the feed rate

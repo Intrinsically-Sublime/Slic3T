@@ -24,7 +24,7 @@ sub new {
     my %panels = (
         printer => {
             title => 'Printer',
-            options => [qw(nozzle_diameter extrusion_width_ratio print_center z_offset gcode_flavor use_relative_e_distances)],
+            options => [qw(nozzle_diameter extrusion_width print_center z_offset gcode_flavor use_relative_e_distances)],
         },
         filament => {
             title => 'Filament',
@@ -36,11 +36,11 @@ sub new {
         },
         speed => {
             title => 'Other speed settings',
-            options => [qw(travel_speed bottom_layer_speed_ratio)],
+            options => [qw(travel_speed bottom_layer_speed)],
         },
         accuracy => {
             title => 'Accuracy',
-            options => [qw(layer_height first_layer_height_ratio infill_every_layers)],
+            options => [qw(layer_height first_layer_height infill_every_layers)],
         },
         print => {
             title => 'Print settings',

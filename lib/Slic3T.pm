@@ -81,7 +81,7 @@ our $small_perimeter_speed  = 45;   # mm/s
 our $infill_speed           = 60;   # mm/s
 our $solid_infill_speed     = 45;   # mm/s
 our $bridge_speed           = 25;   # mm/s
-our $bottom_layer_speed_ratio   = 0.6;
+our $bottom_layer_speed     = 30;   # mm/s or %
 
 # acceleration options
 our $acceleration           = 0;
@@ -92,11 +92,11 @@ our $infill_acceleration    = 50;   # mm/s^2
 our $scaling_factor         = 0.00000001;
 our $small_perimeter_area   = ((6.5 / $scaling_factor)**2)*PI;
 our $layer_height           = 0.15;
-our $first_layer_height_ratio = 1.33;
+our $first_layer_height     = 0.2;  # mm or %
 our $infill_every_layers    = 1;
 
 # flow options
-our $extrusion_width_ratio  = 3.4;
+our $extrusion_width        = 0.52; # mm or %
 our $bridge_flow_ratio      = 1;
 our $overlap_factor         = 0.5;
 our $flow_width;

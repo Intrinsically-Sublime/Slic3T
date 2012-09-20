@@ -724,7 +724,7 @@ sub export_gcode {
     print $fh "\n" if $Slic3T::notes;
     
     for (qw(layer_height perimeters solid_layers fill_density nozzle_diameter filament_diameter
-        extrusion_multiplier perimeter_speed infill_speed travel_speed extrusion_width_ratio scale)) {
+        extrusion_multiplier perimeter_speed infill_speed travel_speed scale)) {
         printf $fh "; %s = %s\n", $_, Slic3T::Config->get($_);
     }
     printf $fh "; single wall width = %.2fmm\n", $Slic3T::flow_width;

@@ -164,7 +164,13 @@ sub extrude_path {
     }
     
     if ($Slic3T::cooling) {
-        $self->elapsed_time($self->elapsed_time + (unscale($path_length) / $self->speeds->{$self->last_speed} * 60));
+ 	my $path_time = unscale($path_length) / $self->speeds->{$self->last_speed} * 60;
+        if ($self->layer->id == 0) {
+            $path_time = $Slic3T::bottom_layer_speed =~ /^(\d+(?:\.\d+)?)%$/
+                ? $path_time / ($1/100)
+                : unscale($path_length) / $Slic3T::bottom_layer_speed * 60;
+        }
+        $self->elapsed_time($self->elapsed_time + $path_time);
     }
     
     return $gcode;
@@ -316,7 +322,14 @@ sub _Gx {
         } elsif ($self->last_speed eq 'bridge') {
             $append_bridge_off = 1;
         }
-        $gcode .= sprintf " F%.${dec}f", $self->speeds->{$speed} * $speed_multiplier;
+	# apply the speed reduction for print moves on bottom layer
+        my $speed_f = $self->speeds->{$speed};
+        if ($e && $self->layer->id == 0 && $comment !~ /retract/) {
+            $speed_f = $Slic3T::bottom_layer_speed =~ /^(\d+(?:\.\d+)?)%$/
+                ? ($speed_f * $1/100)
+                : $Slic3T::bottom_layer_speed * 60;
+        }
+        $gcode .= sprintf " F%.${dec}f", $speed_f;
         $self->last_speed($speed);
     }
     

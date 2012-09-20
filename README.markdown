@@ -99,9 +99,7 @@ The author is Alessandro Ranellucci (me).
       Printer options:
         --nozzle-diameter   Diameter of nozzle in mm (default: 0.5)
         --print-center      Coordinates in mm of the point to center the print around 
-                            (default: 100,100)
         --z-offset          Additional height in mm to add to vertical coordinates
-                            (+/-, default: 0)
         --gcode-flavor      The type of G-code to generate (reprap/teacup/makerbot/mach3/no-extrusion,
                             default: reprap)
         --use-relative-e-distances Enable this to get relative E values
@@ -109,46 +107,43 @@ The author is Alessandro Ranellucci (me).
                             by all firmwares)
         --g0                Use G0 commands for retraction (experimental, not supported by all
                             firmwares)
-        --gcode-comments    Make G-code verbose by adding comments (default: no)
+        --gcode-comments    Make G-code verbose by adding comments
         
       Filament options:
-        --filament-diameter Diameter in mm of your raw filament (default: 3)
+        --filament-diameter Diameter in mm of your raw filament
         --extrusion-multiplier
                             Change this to alter the amount of plastic extruded. There should be
                             very little need to change this value, which is only useful to 
                             compensate for filament packing (default: 1)
-        --temperature       Extrusion temperature in degree Celsius, set 0 to disable (default: 200)
+        --temperature       Extrusion temperature in degree Celsius, set 0 to disable
         --first-layer-temperature Extrusion temperature for the first layer, in degree Celsius,
-                            set 0 to disable (default: same as --temperature)
+                            set 0 to disable
         --bed-temperature   Heated bed temperature in degree Celsius, set 0 to disable (default: 200)
         --first-layer-bed-temperature Heated bed temperature for the first layer, in degree Celsius,
                             set 0 to disable (default: same as --bed-temperature)
         
       Speed options:
-        --travel-speed      Speed of non-print moves in mm/s (default: 130)
-        --perimeter-speed   Speed of print moves for perimeters in mm/s (default: 30)
+        --travel-speed      Speed of non-print moves in mm/s
+        --perimeter-speed   Speed of print moves for perimeters in mm/s
         --small-perimeter-speed
-                            Speed of print moves for small perimeters in mm/s (default: 30)
-        --infill-speed      Speed of print moves in mm/s (default: 60)
-        --solid-infill-speed Speed of print moves for solid surfaces in mm/s (default: 60)
-        --bridge-speed      Speed of bridge print moves in mm/s (default: 60)
-        --bottom-layer-speed-ratio
-                            Factor to increase/decrease speeds on bottom 
-                            layer by (default: 0.3)
+                            Speed of print moves for small perimeters in mm/s
+        --infill-speed      Speed of print moves in mm/s
+        --solid-infill-speed Speed of print moves for solid surfaces in mm/s
+        --bridge-speed      Speed of bridge print moves in mm/s
+        --bottom-layer-speed Speed of print moves for bottom layer, expressed either as an absolute
+                            value or as a percentage over normal speeds
         
       Accuracy options:
-        --layer-height      Layer height in mm (default: 0.4)
-        --first-layer-height-ratio
-                            Multiplication factor for the height to slice and print the first
-                            layer with (> 0, default: 1)
+        --layer-height      Layer height in mm
+        --first-layer-height Layer height for first layer (mm or %)
         --infill-every-layers
                             Infill every N layers (default: 1)
       
       Print options:
-        --perimeters        Number of perimeters/horizontal skins (range: 0+, default: 3)
+        --perimeters        Number of perimeters/horizontal skins
         --solid-layers      Number of solid layers to do for top/bottom surfaces
                             (range: 1+, default: 3)
-        --fill-density      Infill density (range: 0-1, default: 0.4)
+        --fill-density      Infill density (range: 0-1)
         --fill-angle        Infill angle in degrees (range: 0-90, default: 45)
         --fill-pattern      Pattern to use to fill non-solid layers (default: rectilinear)
         --solid-fill-pattern Pattern to use to fill solid layers (default: rectilinear)
@@ -163,7 +158,6 @@ The author is Alessandro Ranellucci (me).
        Retraction options:
         --retract-length    Length of retraction in mm when pausing extrusion 
                             (default: 1)
-        --retract-speed     Speed for retraction in mm/s (default: 30)
         --retract-restart-extra
                             Additional amount of filament in mm to push after
                             compensating retraction (default: 0)
@@ -173,39 +167,37 @@ The author is Alessandro Ranellucci (me).
        
        Cooling options:
         --cooling           Enable fan and cooling control
-        --min-fan-speed     Minimum fan speed (default: 35%)
-        --max-fan-speed     Maximum fan speed (default: 100%)
-        --bridge-fan-speed  Fan speed to use when bridging (default: 100%)
+        --min-fan-speed     Minimum fan speed
+        --max-fan-speed     Maximum fan speed
+        --bridge-fan-speed  Fan speed to use when bridging
         --fan-below-layer-time Enable fan if layer print time is below this approximate number 
-                            of seconds (default: 60)
+                            of seconds
         --slowdown-below-layer-time Slow down if layer print time is below this approximate number
-                            of seconds (default: 15)
-        --min-print-speed   Minimum print speed speed (mm/s, default: 10)
-        --disable-fan-first-layers Disable fan for the first N layers (default: 1)
+                            of seconds
+        --min-print-speed   Minimum print speed speed
+        --disable-fan-first-layers Disable fan for the first N layers
         --fan-always-on     Keep fan always on at min fan speed, even for layers that don't need
                             cooling
        
        Skirt options:
-        --skirts            Number of skirts to draw (0+, default: 1)
-        --skirt-distance    Distance in mm between innermost skirt and object 
-                            (default: 6)
+        --skirts            Number of skirts to draw
+        --skirt-distance    Distance in mm between innermost skirt and object
         --skirt-height      Height of skirts to draw (expressed in layers, 0+, default: 1)
        
        Transform options:
         --scale             Factor for scaling input object (default: 1)
         --rotate            Rotation angle in degrees (0-360, default: 0)
         --duplicate         Number of items with auto-arrange (1+, default: 1)
-        --bed-size          Bed size, only used for auto-arrange (mm, default: 200,200)
+        --bed-size          Bed size, only used for auto-arrange
         --duplicate-grid    Number of items with grid arrangement (default: 1,1)
-        --duplicate-distance Distance in mm between copies (default: 6)
+        --duplicate-distance Distance in mm between copies
         
        Miscellaneous options:
         --notes             Notes to be added as comments to the output file
       
        Flow options (advanced):
-        --extrusion-width-ratio
-                            Calculate the extrusion width as the layer height multiplied by
-                            this value (> 0, default: calculated automatically)
+        --extrusion-width   Set extrusion width manually; it accepts either an absolute value in mm 
+		(like 0.65) or a percentage over layer height (like 200%)
         --bridge-flow-ratio Multiplier for extrusion when bridging (> 0, default: 1)
         
 

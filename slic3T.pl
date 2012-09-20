@@ -160,15 +160,12 @@ $j
     --infill-speed      Speed of print moves in mm/s (default: $Slic3T::infill_speed)
     --solid-infill-speed Speed of print moves for solid surfaces in mm/s (default: $Slic3T::solid_infill_speed)
     --bridge-speed      Speed of bridge print moves in mm/s (default: $Slic3T::bridge_speed)
-    --bottom-layer-speed-ratio
-                        Factor to increase/decrease speeds on bottom 
-                        layer by (default: $Slic3T::bottom_layer_speed_ratio)
+    --bottom-layer-speed Speed of print moves for bottom layer, expressed either as an absolute
+                        value or as a percentage over normal speeds
     
   Accuracy options:
     --layer-height      Layer height in mm (default: $Slic3T::layer_height)
-    --first-layer-height-ratio
-                        Multiplication factor for the height to slice and print the first
-                        layer with (> 0, default: $Slic3T::first_layer_height_ratio)
+    --first-layer-height Layer height for first layer (mm or %, default: $Slic3T::first_layer_height)
     --infill-every-layers
                         Infill every N layers (default: $Slic3T::infill_every_layers)
   
@@ -231,9 +228,8 @@ $j
     --notes             Notes to be added as comments to the output file
   
    Flow options (advanced):
-    --extrusion-width-ratio
-                        Calculate the extrusion width as the layer height multiplied by
-                        this value (> 0, default: calculated automatically)
+    --extrusion-width   Set extrusion width manually; it accepts either an absolute value in mm
+	(like 0.65) or a percentage over layer height (like 200%)
     --bridge-flow-ratio Multiplier for extrusion when bridging (> 0, default: $Slic3T::bridge_flow_ratio)
     
 EOF
