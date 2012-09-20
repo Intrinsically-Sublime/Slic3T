@@ -34,7 +34,7 @@ our $Options = {
         label   => 'Nozzle diameter (mm)',
         cli     => 'nozzle-diameter=f',
         type    => 'f',
-        important => 1,
+        important => 0,
     },
     'print_center' => {
         label   => 'Print center (mm)',
@@ -147,7 +147,7 @@ our $Options = {
         aliases => [qw(solid_infill_feed_rate)],
     },
     'bridge_speed' => {
-        label   => 'Bridges (mm/s)',
+        label   => 'Bridge speed (mm/s)',
         cli     => 'bridge-speed=f',
         type    => 'f',
         aliases => [qw(bridge_feed_rate)],
@@ -554,6 +554,12 @@ sub validate {
     die "Invalid value for --filament-diameter\n"
         if $Slic3T::filament_diameter < 1;
     
+    # --extrusion-width
+    die "--extrusion-width can't be less than --nozzle-diameter\n"
+        if $Slic3T::extrusion_width > 0 && $Slic3T::extrusion_width < $Slic3T::nozzle_diameter * 1.0 && $Slic3T::extrusion_width <150;
+    die "--extrusion-width can't be greater than 1.25 * --nozzle-diameter\n"
+        if $Slic3T::extrusion_width > 0 &&  $Slic3T::extrusion_width > $Slic3T::nozzle_diameter * 1.25 && $Slic3T::extrusion_width <150;
+
     # --nozzle-diameter
     die "Invalid value for --nozzle-diameter\n"
         if $Slic3T::nozzle_diameter < 0;
@@ -580,8 +586,8 @@ sub validate {
             $Slic3T::flow_width = $Slic3T::nozzle_diameter * ($Slic3T::nozzle_diameter/$Slic3T::layer_height - 4/PI + 1);
         }
         
-        my $min_flow_width = $Slic3T::nozzle_diameter * 1.05;
-        my $max_flow_width = $Slic3T::nozzle_diameter * 1.4;
+        my $min_flow_width = $Slic3T::nozzle_diameter * 1.0;
+        my $max_flow_width = $Slic3T::nozzle_diameter * 1.25;
         $Slic3T::flow_width = $max_flow_width if $Slic3T::flow_width > $max_flow_width;
         $Slic3T::flow_width = $min_flow_width if $Slic3T::flow_width < $min_flow_width;
     }

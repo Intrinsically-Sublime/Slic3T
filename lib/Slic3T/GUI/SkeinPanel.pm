@@ -24,23 +24,23 @@ sub new {
     my %panels = (
         printer => {
             title => 'Printer',
-            options => [qw(nozzle_diameter extrusion_width print_center z_offset gcode_flavor use_relative_e_distances)],
+            options => [qw(print_center z_offset gcode_flavor use_relative_e_distances)],
         },
         filament => {
             title => 'Filament',
             options => [qw(filament_diameter extrusion_multiplier temperature first_layer_temperature bed_temperature first_layer_bed_temperature)],
         },
-        print_speed => {
-            title => 'Print speed',
-            options => [qw(perimeter_speed small_perimeter_speed infill_speed solid_infill_speed bridge_speed bridge_flow_ratio)],
-        },
         speed => {
-            title => 'Other speed settings',
-            options => [qw(travel_speed bottom_layer_speed)],
+            title => 'Speed',
+            options => [qw(perimeter_speed small_perimeter_speed infill_speed solid_infill_speed travel_speed bottom_layer_speed)],
         },
+	bridge => {
+	    title => 'Bridge settings',
+	    options => [qw(nozzle_diameter bridge_speed bridge_flow_ratio)],
+	},
         accuracy => {
             title => 'Accuracy',
-            options => [qw(layer_height first_layer_height infill_every_layers)],
+            options => [qw(layer_height first_layer_height extrusion_width infill_every_layers)],
         },
         print => {
             title => 'Print settings',
@@ -102,17 +102,17 @@ sub new {
     };
     
     my @tabs = (
-        $make_tab->([qw(transform accuracy skirt)], [qw(print retract)]),
-        $make_tab->([qw(printer filament)], [qw(print_speed speed)]),
+        $make_tab->([qw(accuracy speed)], [qw(print bridge)]),
+        $make_tab->([qw(transform skirt)], [qw(filament retract)]),
+        $make_tab->([qw(printer cooling)], [qw()]),
         $make_tab->([qw(gcode)]),
-        $make_tab->([qw(cooling)]),
         $make_tab->([qw(notes)]),
     );
     
-    $tabpanel->AddPage($tabs[0], "Print Settings");
-    $tabpanel->AddPage($tabs[1], "Printer and Filament");
-    $tabpanel->AddPage($tabs[2], "Custom G-code");
-    $tabpanel->AddPage($tabs[3], "Cooling");
+    $tabpanel->AddPage($tabs[0], "Print Settings 1");
+    $tabpanel->AddPage($tabs[1], "Print Settings 2");
+    $tabpanel->AddPage($tabs[2], "Printer and Cooling");
+    $tabpanel->AddPage($tabs[3], "Custom G-code");
     $tabpanel->AddPage($tabs[4], "Notes");
         
     my $buttons_sizer;
@@ -125,7 +125,7 @@ sub new {
         EVT_BUTTON($self, $slice_button, sub { $self->do_slice(save_as => 1) });
 
         my $reslice_button = Wx::Button->new($self, -1, "Reslice...");
-        $buttons_sizer->Add($reslice_button, 0, wxRIGHT, 20);
+        $buttons_sizer->Add($reslice_button, 0, wxRIGHT, 30);
         EVT_BUTTON($self, $reslice_button, sub { $self->do_slice(reslice => 1) });
         
         my $save_button = Wx::Button->new($self, -1, "Save config...");

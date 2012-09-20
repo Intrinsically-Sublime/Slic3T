@@ -307,7 +307,7 @@ sub _Gx {
     
     # apply the speed reduction for print moves on bottom layer
     my $speed_multiplier = $e && $self->layer->id == 0 && $comment !~ /retract/
-        ? $Slic3T::bottom_layer_speed_ratio 
+        ? $Slic3T::bottom_layer_speed
         : 1;
     
     # determine speed
