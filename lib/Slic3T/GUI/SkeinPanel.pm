@@ -25,43 +25,57 @@ sub new {
         printer => {
             title => 'Printer',
             options => [qw(print_center z_offset gcode_flavor use_relative_e_distances)],
+            label_width => 235,
         },
         filament => {
             title => 'Filament',
             options => [qw(filament_diameter extrusion_multiplier temperature first_layer_temperature bed_temperature first_layer_bed_temperature)],
+            label_width => 275,
         },
         speed => {
             title => 'Speed',
-            options => [qw(perimeter_speed small_perimeter_speed infill_speed solid_infill_speed travel_speed bottom_layer_speed)],
+            options => [qw(perimeter_speed small_perimeter_speed infill_speed solid_infill_speed travel_speed bottom_layer_speed slowdown_below_layer_time)],
+            label_width => 300,
         },
 	bridge => {
 	    title => 'Bridge settings',
-	    options => [qw(nozzle_diameter bridge_speed bridge_flow_ratio)],
+	    options => [qw(nozzle_diameter bridge_speed bridge_fan_speed bridge_flow_ratio)],
+            label_width => 275,
 	},
         accuracy => {
             title => 'Accuracy',
             options => [qw(layer_height first_layer_height extrusion_width infill_every_layers)],
+            label_width => 300,
         },
         print => {
             title => 'Print settings',
-            options => [qw(perimeters solid_layers fill_density fill_angle fill_pattern solid_fill_pattern support_material support_material_tool)],
+            options => [qw(perimeters solid_layers fill_density fill_angle fill_pattern solid_fill_pattern)],
+            label_width => 125,
         },
+	support => {
+	    title => 'Support',
+	    options => [qw(support_material support_material_tool)],
+            label_width => 250,
+	},
         retract => {
             title => 'Retraction',
             options => [qw(retract_length retract_lift retract_restart_extra retract_before_travel)],
+            label_width => 270,
         },
         cooling => {
             title => 'Cooling',
-            options => [qw(cooling min_fan_speed max_fan_speed bridge_fan_speed fan_below_layer_time slowdown_below_layer_time min_print_speed disable_fan_first_layers fan_always_on)],
-            label_width => 300,
+            options => [qw(cooling min_fan_speed max_fan_speed fan_below_layer_time min_print_speed disable_fan_first_layers fan_always_on)],
+            label_width => 305,
         },
         skirt => {
             title => 'Skirt',
             options => [qw(skirts skirt_distance skirt_height)],
+            label_width => 275,
         },
         transform => {
             title => 'Transform',
             options => [qw(scale rotate duplicate_mode duplicate bed_size duplicate_grid duplicate_distance)],
+            label_width => 255,
         },
         gcode => {
             title => 'Custom G-code',
@@ -103,8 +117,8 @@ sub new {
     
     my @tabs = (
         $make_tab->([qw(accuracy speed)], [qw(print bridge)]),
-        $make_tab->([qw(transform skirt)], [qw(filament retract)]),
-        $make_tab->([qw(printer cooling)], [qw()]),
+        $make_tab->([qw(transform support)], [qw(filament skirt)]),
+        $make_tab->([qw(printer cooling)], [qw(retract)]),
         $make_tab->([qw(gcode)]),
         $make_tab->([qw(notes)]),
     );
