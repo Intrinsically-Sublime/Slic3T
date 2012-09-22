@@ -34,7 +34,7 @@ sub new {
         },
         speed => {
             title => 'Speed',
-            options => [qw(perimeter_speed small_perimeter_speed infill_speed solid_infill_speed travel_speed bottom_layer_speed slowdown_below_layer_time)],
+            options => [qw(perimeter_speed small_perimeter_speed infill_speed solid_infill_speed travel_speed bottom_layer_speed min_print_speed slowdown_below_layer_time)],
             label_width => 290,
         },
 	bridge => {
@@ -64,7 +64,7 @@ sub new {
         },
         cooling => {
             title => 'Cooling',
-            options => [qw(cooling min_fan_speed max_fan_speed fan_below_layer_time min_print_speed disable_fan_first_layers fan_always_on)],
+            options => [qw(cooling min_fan_speed max_fan_speed fan_below_layer_time disable_fan_first_layers fan_always_on)],
             label_width => 295,
         },
         skirt => {
