@@ -44,12 +44,12 @@ sub new {
 	},
         accuracy => {
             title => 'Accuracy',
-            options => [qw(layer_height first_layer_height extrusion_width infill_every_layers)],
+            options => [qw(layer_height first_layer_height extrusion_width)],
             label_width => 290,
         },
         print => {
             title => 'Print settings',
-            options => [qw(perimeters solid_layers fill_density fill_angle fill_pattern solid_fill_pattern)],
+            options => [qw(perimeters solid_layers fill_density fill_angle fill_pattern infill_every_layers solid_fill_pattern)],
             label_width => 125,
         },
 	support => {

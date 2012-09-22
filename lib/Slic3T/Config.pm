@@ -190,7 +190,7 @@ our $Options = {
         type    => 'f',
     },
     'infill_every_layers' => {
-        label   => 'Infill every N layers',
+        label   => 'Every # layers',
         cli     => 'infill-every-layers=i',
         type    => 'i',
     },
@@ -362,7 +362,7 @@ our $Options = {
         type    => 'i',
     },
     'fan_below_layer_time' => {
-        label   => 'Enable fan if layer time is below (sec)',
+        label   => 'Enable fan if layer time below (sec)',
         cli     => 'fan-below-layer-time=i',
         type    => 'i',
     },
