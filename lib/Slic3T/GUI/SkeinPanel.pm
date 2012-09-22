@@ -25,7 +25,7 @@ sub new {
         printer => {
             title => 'Printer',
             options => [qw(print_center z_offset gcode_flavor use_relative_e_distances)],
-            label_width => 235,
+            label_width => 230,
         },
         filament => {
             title => 'Filament',
@@ -35,7 +35,7 @@ sub new {
         speed => {
             title => 'Speed',
             options => [qw(perimeter_speed small_perimeter_speed infill_speed solid_infill_speed travel_speed bottom_layer_speed slowdown_below_layer_time)],
-            label_width => 300,
+            label_width => 290,
         },
 	bridge => {
 	    title => 'Bridge settings',
@@ -45,7 +45,7 @@ sub new {
         accuracy => {
             title => 'Accuracy',
             options => [qw(layer_height first_layer_height extrusion_width infill_every_layers)],
-            label_width => 300,
+            label_width => 290,
         },
         print => {
             title => 'Print settings',
@@ -55,27 +55,32 @@ sub new {
 	support => {
 	    title => 'Support',
 	    options => [qw(support_material support_material_tool)],
-            label_width => 250,
+            label_width => 240,
 	},
         retract => {
             title => 'Retraction',
-            options => [qw(retract_length retract_lift retract_restart_extra retract_before_travel)],
-            label_width => 270,
+            options => [qw(retract retract_length combine_lift retract_lift retract_restart_extra retract_before_travel combine_z)],
+            label_width => 240,
         },
         cooling => {
             title => 'Cooling',
             options => [qw(cooling min_fan_speed max_fan_speed fan_below_layer_time min_print_speed disable_fan_first_layers fan_always_on)],
-            label_width => 305,
+            label_width => 295,
         },
         skirt => {
             title => 'Skirt',
             options => [qw(skirts skirt_distance skirt_height)],
+            label_width => 290,
+        },
+        brim => {
+            title => 'Brim',
+            options => [qw(brim_width)],
             label_width => 275,
         },
         transform => {
             title => 'Transform',
             options => [qw(scale rotate duplicate_mode duplicate bed_size duplicate_grid duplicate_distance)],
-            label_width => 255,
+            label_width => 245,
         },
         gcode => {
             title => 'Custom G-code',
@@ -117,7 +122,7 @@ sub new {
     
     my @tabs = (
         $make_tab->([qw(accuracy speed)], [qw(print bridge)]),
-        $make_tab->([qw(transform support)], [qw(filament skirt)]),
+        $make_tab->([qw(transform skirt)], [qw(support filament brim)]),
         $make_tab->([qw(printer cooling)], [qw(retract)]),
         $make_tab->([qw(gcode)]),
         $make_tab->([qw(notes)]),
@@ -150,8 +155,8 @@ sub new {
         $buttons_sizer->Add($load_button, 0);
         EVT_BUTTON($self, $load_button, sub { $self->load_config });
         
-        my $text = Wx::StaticText->new($self, -1, "Slic3T\nVersion: $Slic3T::VERSION", Wx::wxDefaultPosition, Wx::wxDefaultSize, wxALIGN_RIGHT);
-        my $font = Wx::Font->new(10, wxDEFAULT, wxNORMAL, wxNORMAL);
+        my $text = Wx::StaticText->new($self, -1, "  Slic3T - v$Slic3T::VERSION", Wx::wxDefaultPosition, Wx::wxDefaultSize, wxALIGN_RIGHT);
+        my $font = Wx::Font->new(16, wxDEFAULT, wxNORMAL, wxNORMAL);
         $text->SetFont($font);
         $buttons_sizer->Add($text, 1, wxEXPAND | wxALIGN_RIGHT);
     }

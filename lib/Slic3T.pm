@@ -7,7 +7,7 @@ use strict;
 use warnings;
 require v5.10;
 
-our $VERSION = "0.7.2c";
+our $VERSION = "0.7.2d";
 
 our $debug = 0;
 sub debugf {
@@ -127,6 +127,9 @@ END
 our $layer_gcode        = '';
 
 # retraction options
+our $retract                = 1;
+our $combine_lift           = 1;
+our $combine_z              = 'combined';
 our $retract_length         = 5;    # mm
 our $retract_restart_extra  = 0;    # mm
 our $retract_speed          = 1000;   # mm/s
@@ -144,10 +147,11 @@ our $min_print_speed        = 10;
 our $disable_fan_first_layers = 0;
 our $fan_always_on          = 1;
 
-# skirt options
+# skirt/brim options
 our $skirts             = 3;
 our $skirt_distance     = 6;    # mm
 our $skirt_height       = 1;    # layers
+our $brim_width		= 0; 	# mm
 
 # transform options
 our $scale              = 1;

@@ -183,6 +183,7 @@ The author is Alessandro Ranellucci (me).
         --skirts            Number of skirts to draw
         --skirt-distance    Distance in mm between innermost skirt and object
         --skirt-height      Height of skirts to draw (expressed in layers, 0+, default: 1)
+        --brim-width        Width of the brim that will get added to each object to help adhesion
        
        Transform options:
         --scale             Factor for scaling input object (default: 1)

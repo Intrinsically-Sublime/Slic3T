@@ -43,14 +43,25 @@ sub change_layer {
     my $z = $Slic3T::z_offset + $layer->print_z * $Slic3T::scaling_factor;
     
     my $gcode = "";
-    
+	
+    # Disable retraction on layer change
+    if ($Slic3T::combine_z eq 'disabled') {    
+
+    $gcode .= $self->G0(undef, $z, 0, 'move to next layer')
+        if $self->z != $z;
+	}
+    else {    
+
     $gcode .= $self->retract(move_z => $z);
     $gcode .= $self->G0(undef, $z, 0, 'move to next layer')
         if $self->z != $z;
+	}
     
     $gcode .= Slic3T::Config->replace_options($Slic3T::layer_gcode) . "\n"
         if $Slic3T::layer_gcode;
-    
+	   
+
+
     return $gcode;
 }
 
@@ -177,6 +188,7 @@ sub extrude_path {
 }
 
 sub retract {
+    if ($Slic3T::retract) {
     my $self = shift;
     my %params = @_;
     
@@ -191,26 +203,32 @@ sub retract {
         : [undef, $self->z + $Slic3T::retract_lift, 0, 'lift plate during retraction'];
     
     my $gcode = "";
-    if (($Slic3T::g0 || $Slic3T::gcode_flavor eq 'mach3') && $params{travel_to}) {
+    if ($Slic3T::combine_lift) {
         if ($lift) {
             # combine lift and retract
             $lift->[2] = $retract->[2];
-            $gcode .= $self->G0(@$lift);
-        } else {
-            # combine travel and retract
-            my $travel = [$params{travel_to}, undef, $retract->[2], 'travel and retract'];
-            $gcode .= $self->G0(@$travel);
+            $gcode .= $self->G1(@$lift);
         }
-    } elsif (($Slic3T::g0 || $Slic3T::gcode_flavor eq 'mach3') && defined $params{move_z}) {
+    elsif (($Slic3T::combine_z eq 'combined' && $Slic3T::combine_lift) && $params{move_z}) {
         # combine Z change and retraction
         my $travel = [undef, $params{move_z}, $retract->[2], 'change layer and retract'];
         $gcode .= $self->G0(@$travel);
     } else {
         $gcode .= $self->G1(@$retract);
-        if ($lift) {
-            $gcode .= $self->G1(@$lift);
         }
     }
+    elsif (($Slic3T::combine_z eq 'combined') && $params{move_z}) {
+        # combine Z change and retraction
+        my $travel = [undef, $params{move_z}, $retract->[2], 'change layer and retract'];
+        $gcode .= $self->G0(@$travel);
+    }  
+    else {
+        $gcode .= $self->G1(@$retract);
+        if ($lift) {
+            $gcode .= $self->G0(@$lift);
+        }
+    }
+
     $self->retracted(1);
     $self->lifted(1) if $lift;
     
@@ -222,6 +240,7 @@ sub retract {
     }
     
     return $gcode;
+}
 }
 
 sub unretract {

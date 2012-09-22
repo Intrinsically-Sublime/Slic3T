@@ -16,7 +16,7 @@ our $Options = {
         cli     => 'notes=s',
         type    => 's',
         multiline => 1,
-        width   => 585,
+        width   => 575,
         height  => 370,
         serialize   => sub { join '\n', split /\R/, $_[0] },
         deserialize => sub { join "\n", split /\\n/, $_[0] },
@@ -28,7 +28,7 @@ our $Options = {
         cli     => 'output-filename-format=s',
         type    => 's',
         multiline => 1,
-        width   => 585,
+        width   => 575,
         height  => 25,
     },
 
@@ -260,7 +260,7 @@ our $Options = {
         cli     => 'start-gcode=s',
         type    => 's',
         multiline => 1,
-        width   => 585,
+        width   => 575,
         height  => 110,
         serialize   => sub { join '\n', split /\R+/, $_[0] },
         deserialize => sub { join "\n", split /\\n/, $_[0] },
@@ -270,7 +270,7 @@ our $Options = {
         cli     => 'end-gcode=s',
         type    => 's',
         multiline => 1,
-        width   => 585,
+        width   => 575,
         height  => 110,
         serialize   => sub { join '\n', split /\R+/, $_[0] },
         deserialize => sub { join "\n", split /\\n/, $_[0] },
@@ -280,7 +280,7 @@ our $Options = {
         cli     => 'layer-gcode=s',
         type    => 's',
         multiline => 1,
-        width   => 585,
+        width   => 575,
         height  => 45,
         serialize   => sub { join '\n', split /\R+/, $_[0] },
         deserialize => sub { join "\n", split /\\n/, $_[0] },
@@ -290,13 +290,30 @@ our $Options = {
         cli     => 'post-process=s@',
         type    => 's@',
         multiline => 1,
-        width   => 585,
+        width   => 575,
         height  => 45,
         serialize   => sub { join '; ', @{$_[0]} },
         deserialize => sub { [ split /\s*;\s*/, $_[0] ] },
     },
     
     # retraction options
+    'retract' => {
+        label   => 'Enable retraction',
+        cli     => 'retract',
+        type    => 'bool',
+    },
+    'combine_lift' => {
+        label   => 'Combine retraction with Z lift',
+        cli     => 'combine-lift',
+        type    => 'bool',
+    },
+    'combine_z' => {
+        label   => 'Layer change retraction',
+        cli     => 'combine-z=s',
+        type    => 'select',
+        values  => [qw(normal combined disabled)],
+        labels  => ['Normal', 'Combined', 'Disabled'],
+    },
     'retract_length' => {
         label   => 'Length (mm)',
         cli     => 'retract-length=f',
@@ -318,7 +335,7 @@ our $Options = {
         type    => 'f',
     },
     'retract_lift' => {
-        label   => 'Lift Z (mm)',
+        label   => 'Z Lift (mm)',
         cli     => 'retract-lift=f',
         type    => 'f',
     },
@@ -379,12 +396,17 @@ our $Options = {
     'skirt_distance' => {
         label   => 'Distance from object (mm)',
         cli     => 'skirt-distance=f',
-        type    => 'i',
+        type    => 'f',
     },
     'skirt_height' => {
         label   => 'Skirt height (layers)',
         cli     => 'skirt-height=i',
         type    => 'i',
+    },
+    'brim_width' => {
+        label   => 'Brim width (mm)',
+        cli     => 'brim_width=f',
+        type    => 'f',
     },
     
     # transform options
